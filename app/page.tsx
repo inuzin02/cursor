@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Navigation from "@/components/navigation"
@@ -10,9 +10,9 @@ import BubbleEffect from "@/components/bubble-effect"
 import EnhancedAcrylicBackground from "@/components/enhanced-acrylic-background"
 import AboutSection from "@/components/about-section"
 import Footer from "@/components/footer"
+import AnimatedCircles from "@/components/AnimatedCircles"
 
 export default function Home() {
-  const [showIntro, setShowIntro] = useState(true)
   const [showBubbles, setShowBubbles] = useState(false)
   const [showFirstLine, setShowFirstLine] = useState(false)
   const [showSecondLine, setShowSecondLine] = useState(false)
@@ -26,33 +26,9 @@ export default function Home() {
     news: useRef(null),
     about: useRef(null),
     recruit: useRef(null),
+    company: useRef(null),
     contact: useRef(null),
   }
-
-  useEffect(() => {
-    // Only start the main page animations after the intro is complete
-    if (!showIntro) {
-      // Start the animation sequence when the component mounts
-      const timer1 = setTimeout(() => {
-        setShowFirstLine(true)
-      }, 500) // Start after a small initial delay
-
-      const timer2 = setTimeout(() => {
-        setShowSecondLine(true)
-      }, 1500) // 1 second after the first line starts
-
-      const timer3 = setTimeout(() => {
-        setShowThirdLine(true)
-      }, 2500) // 1 second after the second line starts
-
-      // Clean up timers
-      return () => {
-        clearTimeout(timer1)
-        clearTimeout(timer2)
-        clearTimeout(timer3)
-      }
-    }
-  }, [showIntro])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,23 +57,46 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [showBubbles])
 
+  // ページ初回マウント時に水玉アニメーションを表示
+  useEffect(() => {
+    setShowBubbles(true)
+  }, [])
+
   const scrollToSection = (sectionId) => {
     sectionRefs[sectionId].current?.scrollIntoView({ behavior: "smooth" })
-  }
-
-  const handleIntroComplete = () => {
-    setShowIntro(false)
   }
 
   const handleBubblesStart = () => {
     setShowBubbles(true)
   }
 
+  const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const formData = {
+      name: form.name.value,
+      company: form.company.value,
+      email: form.email.value,
+      message: form.message.value,
+    }
+
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    })
+
+    if (res.ok) {
+      alert('送信が完了しました。')
+      form.reset()
+    } else {
+      alert('送信に失敗しました。')
+    }
+  }
+
   return (
     <>
-      {/* Only show Navigation when intro animation is complete */}
-      <Navigation activeSection={activeSection} onNavigate={scrollToSection} isVisible={!showIntro} />
-
+      <Navigation activeSection={activeSection} onNavigate={scrollToSection} isVisible={true} />
       <main className="flex min-h-screen flex-col items-center justify-center p-4">
         {/* Main content sections */}
         <section
@@ -111,76 +110,43 @@ export default function Home() {
           {showBubbles && <BubbleEffect isVisible={showBubbles} />}
 
           <div className="text-left w-full max-w-[150%] px-4 md:px-8 lg:px-12">
-            <div className="text-4xl md:text-5xl lg:text-6xl font-bold leading-relaxed mb-6 overflow-hidden">
+            <div className="text-4xl md:text-5xl lg:text-6xl font-bold leading-relaxed mb-6 overflow-hidden relative">
               <motion.p
-                initial={{ x: -100, opacity: 0 }}
-                animate={{
-                  x: showFirstLine ? 0 : -100,
-                  opacity: showFirstLine ? 1 : 0,
-                }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                className="text-[#696969]"
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                className="text-[#000000]"
               >
-                クリエイティブテクノロジーで
+                テクノロジーで
               </motion.p>
               <motion.p
-                initial={{ x: -100, opacity: 0 }}
-                animate={{
-                  x: showSecondLine ? 0 : -100,
-                  opacity: showSecondLine ? 1 : 0,
-                }}
-                transition={{ duration: 1, ease: "easeOut" }}
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
+                className="text-[#000000] mt-2"
               >
                 <span className="bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] text-transparent bg-clip-text">
-                  アニメの未来
+                  クリエイターの未来
                 </span>
-                <span className="text-[#696969]">を創造する</span>
+                <span className="text-[#000000]">を創造する</span>
               </motion.p>
             </div>
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{
-                y: showThirdLine ? 0 : 20,
-                opacity: showThirdLine ? 1 : 0,
-              }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-              className="text-base md:text-lg lg:text-2xl w-full text-[#696969]"
-            >
-              <p>CrestLabは、想像力と革新的技術の融合でアニメ制作の新時代を切り開きます</p>
-              <p>&nbsp;</p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Business section (now PURPOSE) with enhanced acrylic background */}
-        <section
-          ref={sectionRefs.business}
-          id="business"
-          className="min-h-screen flex flex-col items-center justify-center w-full py-16 px-4 md:px-8 relative"
-        >
-          {/* Add the enhanced acrylic background */}
-          <EnhancedAcrylicBackground />
-
-          <div className="relative z-10 flex flex-col items-center">
-            {/* News section content */}
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#696969] mb-12 relative">
-              PURPOSE
-              <span className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE]"></span>
-            </h2>
-
-            <div className="w-full max-w-6xl">
-              <div className="text-2xl md:text-3xl lg:text-4xl text-[#696969] text-center font-medium mt-8 leading-relaxed">
-                <p>アニメーターの創作性をAIがアシストし、</p>
-                <p>最高の作品を創り出す。</p>
-              </div>
-
-              <div className="mt-12 text-sm md:text-base lg:text-lg text-[#696969] text-center max-w-4xl mx-auto">
-                <p>CrestLabは、映画・TVアニメ、ゲームなどにおいて、アニメーターのクリエイティブを最大化する目的で、</p>
-                <p>AIをワークフローに組み入れた新たなアニメーション制作の型作りを推進します。</p>
-              </div>
+            <div className="relative">
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }}
+                className="text-base md:text-lg lg:text-2xl w-full text-[#000000]"
+              >
+                <p>CrestLabは創造力と革新的技術の融合でアニメ制作の新時代を切り開きます</p>
+                <p>&nbsp;</p>
+              </motion.div>
             </div>
           </div>
         </section>
+
+        {/* About section - now using the AboutSection component */}
+        <AboutSection ref={sectionRefs.about} />
 
         {/* News section */}
         <section
@@ -194,115 +160,13 @@ export default function Home() {
             <span className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE]"></span>
           </h2>
 
-          <div className="w-full max-w-4xl relative z-10">
-            <div className="flex flex-col space-y-6">
-              <div className="border-b border-gray-300 pb-4">
-                <div className="flex flex-col md:flex-row md:items-center">
-                  <div className="text-[#696969] font-medium w-32 mb-2 md:mb-0">2025.12.1</div>
-                  <div className="text-[#696969]">★採用情報★ イラストアニメーター2名募集 〜詳細はこちら〜</div>
-                </div>
-              </div>
-
-              <div className="border-b border-gray-300 pb-4">
-                <div className="flex flex-col md:flex-row md:items-center">
-                  <div className="text-[#696969] font-medium w-32 mb-2 md:mb-0">2025.9.1</div>
-                  <div className="text-[#696969]">"アニメC" TVアニメ第二期制作決定！！</div>
-                </div>
-              </div>
-
-              <div className="border-b border-gray-300 pb-4">
-                <div className="flex flex-col md:flex-row md:items-center">
-                  <div className="text-[#696969] font-medium w-32 mb-2 md:mb-0">2025.3.1</div>
-                  <div className="text-[#696969]">
-                    "アニメA"放送日解禁！！
-                    <br />
-                    4月7日より、Netflix、Amazon Prime Videoにて先行配信
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="w-full max-w-4xl relative z-10 flex flex-col items-center justify-center">
+            <p className="text-lg text-[#696969] text-center py-24">現在ニュースはありません</p>
           </div>
 
           {/* Animated decorative dotted circle pattern */}
-          <motion.div
-            className="absolute bottom-0 right-0 w-[600px] h-[600px] z-0"
-            initial={{ opacity: 0.2, scale: 0.9 }}
-            animate={{
-              opacity: 1, // Increased from 0.3 to 0.6
-              scale: 1,
-              rotate: 360,
-            }}
-            transition={{
-              duration: 60,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "linear",
-            }}
-          >
-            <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#9AECEA" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#F6B7EE" stopOpacity="0.9" />
-                </linearGradient>
-              </defs>
-              <g>
-                {Array.from({ length: 20 }).map((_, i) => (
-                  <motion.circle
-                    key={`circle-${i}`}
-                    cx={300}
-                    cy={300}
-                    r={100 + i * 15}
-                    fill="none"
-                    stroke="url(#circleGradient)" // Using gradient instead of solid color
-                    strokeWidth="2" // Further increased stroke width
-                    strokeDasharray="2 8" // Modified dash pattern
-                    initial={{ opacity: 0.7 }} // Further increased initial opacity
-                    animate={{
-                      opacity: [0.7, 1, 0.7], // Further increased opacity range
-                      scale: [1, 1.02, 1],
-                    }}
-                    transition={{
-                      duration: 8 + i * 0.5,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                      delay: i * 0.2,
-                    }}
-                  />
-                ))}
-                {Array.from({ length: 200 }).map((_, i) => {
-                  const angle = Math.random() * Math.PI * 2
-                  const radius = 50 + Math.random() * 250
-                  // Determine color based on position in the circle
-                  const colorChoice = Math.random() > 0.5
-                  const dotColor = colorChoice ? "#65E7E4" : "#F48FE0" // Darker brand colors
-                  return (
-                    <motion.circle
-                      key={`dot-${i}`}
-                      cx={300 + Math.cos(angle) * radius}
-                      cy={300 + Math.sin(angle) * radius}
-                      r={2 + Math.random() * 4} // Even larger dots
-                      fill={dotColor} // Using brand colors
-                      initial={{ opacity: 1.0 }} // Further increased initial opacity
-                      animate={{
-                        opacity: [1, 1, 1], // Further increased opacity range
-                        r: [2 + Math.random() * 4, 3 + Math.random() * 5, 2 + Math.random() * 4],
-                      }}
-                      transition={{
-                        duration: 3 + Math.random() * 5,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "easeInOut",
-                        delay: Math.random() * 2,
-                      }}
-                    />
-                  )
-                })}
-              </g>
-            </svg>
-          </motion.div>
+          <AnimatedCircles />
         </section>
-
-        {/* About section - now using the AboutSection component */}
-        <AboutSection ref={sectionRefs.about} />
 
         {/* RECRUIT SECTION */}
         <section
@@ -341,18 +205,15 @@ export default function Home() {
                   </h3>
                   <p className="text-[#696969] mb-8 leading-relaxed">
                     CrestLabでは、アニメーション業界の未来を共に創る仲間を募集しています。
-                    私たちは、多様なバックグラウンドと専門知識を持つ人材が集まることで、
-                    革新的なアイデアが生まれると信じています。
-                  </p>
+                    私たちは、多様なバックグラウンドと専門知識を持つ人材が集まることで、革新的なアイデアが生まれると信じています。</p>
                 </div>
 
                 <div className="mt-8">
                   <p className="text-[#696969] mb-6 leading-relaxed">
-                    技術とアートの境界を超え、新しい表現方法を模索する情熱的なチームの一員になりませんか？
-                    私たちは常に、創造性を大切にし、挑戦を恐れない人材を求めています。
+                    技術と創造性を融合し、新しい表現方法を模索する情熱的なチームの一員になりませんか？ 私たちは常に、創造性を大切にし、挑戦を恐れない人材を求めています。
                   </p>
                   <p className="text-[#696969] mb-6 leading-relaxed">
-                    CrestLabでは、あなたのユニークな視点と専門知識が、次世代のアニメーション技術を形作る重要な役割を果たします。
+                    あなたのユニークな視点と専門知識が、次世代のアニメーション技術を形作る重要な役割を果たします。
                   </p>
                 </div>
               </motion.div>
@@ -366,7 +227,7 @@ export default function Home() {
                 className="relative"
               >
                 <div className="relative w-full h-[400px] rounded-lg overflow-hidden shadow-xl">
-                  <Image src="/collaborative-anime-creation.png" alt="CrestLabチーム" fill className="object-cover" />
+                  <Image src="/recruit-office.jpg" alt="CrestLabオフィス" fill className="object-cover" />
                 </div>
                 <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] rounded-full opacity-50"></div>
                 <div className="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] rounded-full opacity-30"></div>
@@ -375,6 +236,57 @@ export default function Home() {
           </motion.div>
         </section>
 
+        {/* COMPANY SECTION */}
+        <section
+          ref={sectionRefs.company}
+          id="company"
+          className="min-h-screen flex flex-col items-center justify-center w-full py-16 px-4 md:px-8 bg-white"
+        >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#696969] mb-12 relative">
+            COMPANY
+            <span className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE]"></span>
+          </h2>
+          <div className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-center gap-12">
+            {/* CrestLabロゴ */}
+            <div className="flex-shrink-0 flex items-center justify-center w-full md:w-1/3">
+              <img src="/company-logo.png" alt="CrestLab" className="w-64 md:w-72 lg:w-80 h-auto" />
+            </div>
+            {/* 会社概要テーブル */}
+            <div className="w-full md:w-2/3">
+              <table className="w-full text-left text-gray-700 mb-4">
+                <tbody>
+                  <tr>
+                    <td className="py-1 pr-4 whitespace-nowrap">会社名</td>
+                    <td className="py-1 px-2">|</td>
+                    <td className="py-1">株式会社CrestLab</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1 pr-4 whitespace-nowrap">代表取締役</td>
+                    <td className="py-1 px-2">|</td>
+                    <td className="py-1">坂東 裕太</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1 pr-4 whitespace-nowrap">設立</td>
+                    <td className="py-1 px-2">|</td>
+                    <td className="py-1">2025年1月</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1 pr-4 whitespace-nowrap">資本金</td>
+                    <td className="py-1 px-2">|</td>
+                    <td className="py-1">300万円</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1 pr-4 whitespace-nowrap">所在地</td>
+                    <td className="py-1 px-2">|</td>
+                    <td className="py-1">〒101-0024<br />東京都千代田区神田和泉町1番地6-16ヤマトビル405</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT SECTION */}
         <section
           ref={sectionRefs.contact}
           id="contact"
@@ -386,44 +298,52 @@ export default function Home() {
             <span className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE]"></span>
           </h2>
           <div className="w-full max-w-2xl bg-white rounded-lg shadow-md p-8">
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleContactSubmit}>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                  お名前
+                  お名前 <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   id="name"
+                  name="name"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9AECEA]"
+                />
+              </div>
+              <div>
+                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+                  会社名 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9AECEA]"
                 />
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  メールアドレス
+                  メールアドレス <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
                   id="email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9AECEA]"
-                />
-              </div>
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
-                  件名
-                </label>
-                <input
-                  type="text"
-                  id="subject"
+                  name="email"
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9AECEA]"
                 />
               </div>
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                  メッセージ
+                  メッセージ <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   id="message"
+                  name="message"
                   rows={5}
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9AECEA]"
                 ></textarea>
               </div>
@@ -440,9 +360,6 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
-
-      {/* Overlay the intro animation on top of the main content */}
-      {showIntro && <IntroAnimation onAnimationComplete={handleIntroComplete} onBubblesStart={handleBubblesStart} />}
     </>
   )
 }

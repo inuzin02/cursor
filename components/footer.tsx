@@ -1,5 +1,4 @@
 import Image from "next/image"
-import { Instagram, Twitter, Youtube, Mail } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -16,38 +15,6 @@ export default function Footer() {
               className="h-full w-auto"
             />
           </div>
-        </div>
-
-        {/* Social media links below logo */}
-        <div className="flex space-x-4 mb-3">
-          <a
-            href="#"
-            className="w-8 h-8 rounded-full bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-            aria-label="Twitter"
-          >
-            <Twitter size={16} />
-          </a>
-          <a
-            href="#"
-            className="w-8 h-8 rounded-full bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-            aria-label="Instagram"
-          >
-            <Instagram size={16} />
-          </a>
-          <a
-            href="#"
-            className="w-8 h-8 rounded-full bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-            aria-label="YouTube"
-          >
-            <Youtube size={16} />
-          </a>
-          <a
-            href="#contact"
-            className="w-8 h-8 rounded-full bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-            aria-label="Email"
-          >
-            <Mail size={16} />
-          </a>
         </div>
 
         {/* Copyright */}

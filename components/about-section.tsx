@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
 
 // Using forwardRef to properly handle the ref from the parent component
-const AboutSection = forwardRef((props, ref) => {
+const AboutSection = forwardRef<HTMLElement, any>((props, ref) => {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const AboutSection = forwardRef((props, ref) => {
     <section
       ref={ref}
       id="about"
-      className="relative min-h-screen w-full flex flex-col justify-center items-center px-4 overflow-hidden bg-gradient-to-b from-slate-50 to-white py-16"
+      className="relative min-h-screen w-full flex flex-col justify-center items-center px-4 overflow-hidden bg-gradient-to-b from-slate-50 to-white py-4"
     >
       {/* ABOUT US heading with underline */}
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#696969] mb-12 relative z-20">
@@ -59,25 +59,23 @@ const AboutSection = forwardRef((props, ref) => {
         initial={{ opacity: 0, y: 30 }}
         animate={isVisible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
-        className="relative max-w-5xl w-full rounded-xl shadow-lg p-8 md:p-12 bg-white z-10 border border-gray-100"
+        className="relative max-w-5xl w-full rounded-xl shadow-lg p-2 md:p-4 bg-white z-10 border border-gray-100"
       >
-        <div className="flex flex-col md:flex-row gap-12">
+        <div className="flex flex-col md:flex-row gap-6 items-center justify-center min-h-[240px]">
           {/* Left column */}
-          <div className="md:w-2/5">
+          <div className="md:w-2/5 flex flex-col items-center justify-center h-full text-center">
             <motion.h3
               initial={{ opacity: 0 }}
               animate={isVisible ? { opacity: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-3xl md:text-4xl font-bold leading-tight mb-4 text-gray-800"
             >
-              わたしたちが
-              <br />
-              目指すこと
+              わたしたちが<br />めざすこと
             </motion.h3>
           </div>
 
           {/* Right column */}
-          <div className="md:w-3/5">
+          <div className="md:w-3/5 flex flex-col items-center justify-center h-full text-center">
             <motion.h2
               initial={{ opacity: 0 }}
               animate={isVisible ? { opacity: 1 } : {}}
@@ -92,8 +90,8 @@ const AboutSection = forwardRef((props, ref) => {
               transition={{ duration: 0.6, delay: 0.7 }}
               className="mb-8 leading-relaxed text-gray-600"
             >
-              アニメーション制作の未来を見据え、クリエイターの想像力を最大限に引き出す環境を構築します。
-              私たちは技術と芸術の融合を通じて、新しい表現の可能性を追求し続けています。
+              アニメーション制作の未来を見据え、AIでクリエイターの創造力を最大限に引き出す環境を構築します。
+              私たちは技術と芸術の融合を通じて、新しい表現の可能性を追求し続けます。
             </motion.p>
           </div>
         </div>
