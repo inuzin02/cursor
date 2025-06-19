@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, RefObject } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Navigation from "@/components/navigation"
@@ -17,17 +17,17 @@ export default function Home() {
   const [showFirstLine, setShowFirstLine] = useState(false)
   const [showSecondLine, setShowSecondLine] = useState(false)
   const [showThirdLine, setShowThirdLine] = useState(false)
-  const [activeSection, setActiveSection] = useState("home")
+  const [activeSection, setActiveSection] = useState<"home" | "business" | "news" | "about" | "recruit" | "company" | "contact">("home")
 
-  // Updated section refs to include business section
-  const sectionRefs = {
-    home: useRef(null),
-    business: useRef(null),
-    news: useRef(null),
-    about: useRef(null),
-    recruit: useRef(null),
-    company: useRef(null),
-    contact: useRef(null),
+  type SectionKey = "home" | "business" | "news" | "about" | "recruit" | "company" | "contact"
+  const sectionRefs: Record<SectionKey, RefObject<HTMLElement | null>> = {
+    home: useRef<HTMLElement | null>(null),
+    business: useRef<HTMLElement | null>(null),
+    news: useRef<HTMLElement | null>(null),
+    about: useRef<HTMLElement | null>(null),
+    recruit: useRef<HTMLElement | null>(null),
+    company: useRef<HTMLElement | null>(null),
+    contact: useRef<HTMLElement | null>(null),
   }
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function Home() {
       const scrollPosition = window.scrollY + window.innerHeight / 3
 
       // Check which section is currently in view
-      for (const section in sectionRefs) {
+      for (const section of Object.keys(sectionRefs) as SectionKey[]) {
         const element = sectionRefs[section].current
         if (element) {
           const { offsetTop, offsetHeight } = element
@@ -46,7 +46,6 @@ export default function Home() {
             if (section !== "home" && showBubbles) {
               setShowBubbles(false)
             }
-
             break
           }
         }
@@ -62,36 +61,12 @@ export default function Home() {
     setShowBubbles(true)
   }, [])
 
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = (sectionId: SectionKey) => {
     sectionRefs[sectionId].current?.scrollIntoView({ behavior: "smooth" })
   }
 
   const handleBubblesStart = () => {
     setShowBubbles(true)
-  }
-
-  const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const form = event.currentTarget
-    const formData = {
-      name: form.name.value,
-      company: form.company.value,
-      email: form.email.value,
-      message: form.message.value,
-    }
-
-    const res = await fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    })
-
-    if (res.ok) {
-      alert('送信が完了しました。')
-      form.reset()
-    } else {
-      alert('送信に失敗しました。')
-    }
   }
 
   return (
@@ -297,63 +272,16 @@ export default function Home() {
             CONTACT
             <span className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE]"></span>
           </h2>
-          <div className="w-full max-w-2xl bg-white rounded-lg shadow-md p-8">
-            <form className="space-y-6" onSubmit={handleContactSubmit}>
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                  お名前 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9AECEA]"
-                />
-              </div>
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
-                  会社名 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9AECEA]"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  メールアドレス <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9AECEA]"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                  メッセージ <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9AECEA]"
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="w-full py-3 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] text-white font-medium rounded-md hover:opacity-90 transition-opacity duration-300"
-              >
-                送信する
-              </button>
-            </form>
+          <div className="w-full max-w-2xl bg-white rounded-lg shadow-md p-8 flex flex-col items-center">
+            <p className="text-lg text-[#696969] mb-8 text-center">ご相談・お問い合わせはこちらからお願いいたします</p>
+            <a
+              href="https://forms.gle/1UroMk9c2gswiEwP7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block w-full md:w-auto px-8 py-4 text-lg font-bold text-white rounded-md bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] shadow-lg hover:opacity-90 transition-opacity duration-300 text-center"
+            >
+              お問い合わせはこちら
+            </a>
           </div>
         </section>
       </main>
