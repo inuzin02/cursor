@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'CrestLab Inc.',
+  description: 'クリエイターの創造性を加速するアニメ制作基盤 "ANICRA"',
   generator: 'v0.dev',
 }
 
@@ -14,6 +14,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </head>
       <body>{children}</body>
     </html>
   )

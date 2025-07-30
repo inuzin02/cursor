@@ -8,7 +8,7 @@ import AnimatedHero from "@/components/animated-hero"
 import IntroAnimation from "@/components/intro-animation"
 import BubbleEffect from "@/components/bubble-effect"
 import EnhancedAcrylicBackground from "@/components/enhanced-acrylic-background"
-import AboutSection from "@/components/about-section"
+import ProductsSection from "@/components/about-section"
 import Footer from "@/components/footer"
 import AnimatedCircles from "@/components/AnimatedCircles"
 
@@ -17,14 +17,14 @@ export default function Home() {
   const [showFirstLine, setShowFirstLine] = useState(false)
   const [showSecondLine, setShowSecondLine] = useState(false)
   const [showThirdLine, setShowThirdLine] = useState(false)
-  const [activeSection, setActiveSection] = useState<"home" | "business" | "news" | "about" | "recruit" | "company" | "contact">("home")
+  const [activeSection, setActiveSection] = useState<"home" | "business" | "news" | "products" | "recruit" | "company" | "contact">("home")
 
-  type SectionKey = "home" | "business" | "news" | "about" | "recruit" | "company" | "contact"
+  type SectionKey = "home" | "business" | "news" | "products" | "recruit" | "company" | "contact"
   const sectionRefs: Record<SectionKey, RefObject<HTMLElement | null>> = {
     home: useRef<HTMLElement | null>(null),
     business: useRef<HTMLElement | null>(null),
     news: useRef<HTMLElement | null>(null),
-    about: useRef<HTMLElement | null>(null),
+    products: useRef<HTMLElement | null>(null),
     recruit: useRef<HTMLElement | null>(null),
     company: useRef<HTMLElement | null>(null),
     contact: useRef<HTMLElement | null>(null),
@@ -107,21 +107,21 @@ export default function Home() {
               </motion.p>
             </div>
             <div className="relative">
-              <motion.div
+            <motion.div
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }}
                 className="text-base md:text-lg lg:text-2xl w-full text-[#000000]"
-              >
+            >
                 <p>CrestLabは創造力と革新的技術の融合でアニメ制作の新時代を切り開きます</p>
-                <p>&nbsp;</p>
-              </motion.div>
+              <p>&nbsp;</p>
+            </motion.div>
             </div>
           </div>
         </section>
 
         {/* About section - now using the AboutSection component */}
-        <AboutSection ref={sectionRefs.about} />
+        <ProductsSection ref={sectionRefs.products} />
 
         {/* News section */}
         <section
@@ -208,6 +208,16 @@ export default function Home() {
                 <div className="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] rounded-full opacity-30"></div>
               </motion.div>
             </div>
+            <div className="flex justify-center mt-8">
+              <a
+                href="https://www.wantedly.com/companies/company_7832995"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-8 py-4 text-lg font-bold rounded-md bg-white shadow-lg hover:opacity-90 transition-opacity duration-300 text-center"
+              >
+                <img src="/wantedly-logo.png" alt="Wantedly" style={{ maxWidth: '200px', width: '100%', height: 'auto' }} />
+              </a>
+            </div>
           </motion.div>
         </section>
 
@@ -279,7 +289,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block w-full md:w-auto px-8 py-4 text-lg font-bold text-white rounded-md bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] shadow-lg hover:opacity-90 transition-opacity duration-300 text-center"
-            >
+              >
               お問い合わせはこちら
             </a>
           </div>

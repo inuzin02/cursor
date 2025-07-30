@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 
 interface NavigationProps {
-  activeSection: "home" | "business" | "news" | "about" | "recruit" | "company" | "contact"
-  onNavigate: (sectionId: "home" | "business" | "news" | "about" | "recruit" | "company" | "contact") => void
+  activeSection: "home" | "business" | "news" | "products" | "recruit" | "company" | "contact"
+  onNavigate: (sectionId: "home" | "business" | "news" | "products" | "recruit" | "company" | "contact") => void
   isVisible: boolean
 }
 
@@ -25,7 +25,7 @@ export default function Navigation({ activeSection, onNavigate, isVisible }: Nav
 
   const navItems: { id: NavigationProps["activeSection"], label: string }[] = [
     { id: "home", label: "HOME" },
-    { id: "about", label: "ABOUT US" },
+    { id: "products", label: "PRODUCTS" },
     { id: "news", label: "NEWS" },
     { id: "recruit", label: "RECRUIT" },
     { id: "company", label: "COMPANY" },
