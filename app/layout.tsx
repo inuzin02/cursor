@@ -43,6 +43,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="/favicon.ico" />
+        <meta name="google-site-verification" content="SDEJnZ3d2XdMiEVC_E8wY2ZracBTU3i7p6LKyhp2tAE" />
       </head>
       <body>{children}</body>
     </html>
