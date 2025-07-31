@@ -346,20 +346,14 @@ export default function AnicraLandingPageV4() {
         {/* Contact Section */}
         <section id="contact" className="py-24 md:py-32 bg-gray-900 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-cyan-900/20 to-pink-900/20"></div>
-          <motion.div
-            variants={sectionVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-            className="container mx-auto px-4 text-center relative z-10"
-          >
-            <motion.p variants={itemVariants} className="text-2xl font-bold text-cyan-300 mb-4">
+          <div className="container mx-auto px-4 text-center relative z-10">
+            <p className="text-2xl font-bold text-cyan-300 mb-4">
               トライアル受付中
-            </motion.p>
-            <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-8">
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-8">
               まずはお気軽にご相談ください
-            </motion.h2>
-            <motion.div variants={itemVariants}>
+            </h2>
+            <div>
               <Button
                 onClick={openContactForm}
                 size="lg"
@@ -368,8 +362,8 @@ export default function AnicraLandingPageV4() {
                 お問い合わせはこちら
                 <ArrowRight className="ml-2 w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </section>
       </main>
 
@@ -414,7 +408,7 @@ export default function AnicraLandingPageV4() {
                 </li>
                 <li>
                   <a 
-                    href="https://sweet-math-6c3.notion.site/2403d3145bfc80c2a0e2cf5610b623e3?source=copy_link" 
+                    href="https://crestlab.notion.site/2403d3145bfc80c2a0e2cf5610b623e3?pvs=74" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="hover:text-white transition-colors"

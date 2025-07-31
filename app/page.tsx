@@ -101,9 +101,9 @@ export default function Home() {
                 className="text-[#000000] mt-2"
               >
                 <span className="bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE] text-transparent bg-clip-text">
-                  クリエイターの未来
+                  クリエイターの創造性
                 </span>
-                <span className="text-[#000000]">を創造する</span>
+                <span className="text-[#000000]">を加速する</span>
               </motion.p>
             </div>
             <div className="relative">
