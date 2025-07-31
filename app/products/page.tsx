@@ -60,7 +60,25 @@ export default function AnicraLandingPageV4() {
   }
 
   return (
-    <div className="bg-white text-gray-800 font-sans antialiased">
+    <>
+      <head>
+        <title>ANICRA - AIでクリエイターの創造性を加速する | CrestLab Inc.</title>
+        <meta name="description" content="ANICRA（アニクラ）は、AI技術を活用したアニメ制作支援基盤。原画をもとに中割・仕上げを自動化し、制作時間を大幅に短縮。クリエイターの創造性を加速します。" />
+        <meta name="keywords" content="ANICRA, アニクラ, アニメ制作, AI, 自動化, 中割, 仕上げ, 制作支援, CrestLab" />
+        <meta property="og:title" content="ANICRA - AIでクリエイターの創造性を加速する" />
+        <meta property="og:description" content="ANICRA（アニクラ）は、AI技術を活用したアニメ制作支援基盤。原画をもとに中割・仕上げを自動化し、制作時間を大幅に短縮。" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="CrestLab Inc." />
+        <meta property="og:image" content="/anicra-product.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="ANICRA - AIでクリエイターの創造性を加速する" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ANICRA - AIでクリエイターの創造性を加速する" />
+        <meta name="twitter:description" content="ANICRA（アニクラ）は、AI技術を活用したアニメ制作支援基盤。原画をもとに中割・仕上げを自動化し、制作時間を大幅に短縮。" />
+        <meta name="twitter:image" content="/anicra-product.png" />
+      </head>
+      <div className="bg-white text-gray-800 font-sans antialiased">
       {/* Header */}
       <motion.header
         initial={{ y: -100, opacity: 0 }}
@@ -434,6 +452,7 @@ export default function AnicraLandingPageV4() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   )
 }

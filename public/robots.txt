@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://crestlab-inc.com/sitemap.xml 
