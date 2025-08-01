@@ -9,6 +9,7 @@ import IntroAnimation from "@/components/intro-animation"
 import BubbleEffect from "@/components/bubble-effect"
 import EnhancedAcrylicBackground from "@/components/enhanced-acrylic-background"
 import ProductsSection from "@/components/about-section"
+import NewsSection from "@/components/news-section"
 import Footer from "@/components/footer"
 import AnimatedCircles from "@/components/AnimatedCircles"
 
@@ -127,20 +128,9 @@ export default function Home() {
         <section
           ref={sectionRefs.news}
           id="news"
-          className="min-h-screen flex flex-col items-center justify-center w-full py-16 px-4 md:px-8 relative"
+          className="min-h-screen w-full relative"
         >
-          {/* News section content */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#696969] mb-12 relative">
-            NEWS
-            <span className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-[#9AECEA] to-[#F6B7EE]"></span>
-          </h2>
-
-          <div className="w-full max-w-4xl relative z-10 flex flex-col items-center justify-center">
-            <p className="text-lg text-[#696969] text-center py-24">現在ニュースはありません</p>
-          </div>
-
-          {/* Animated decorative dotted circle pattern */}
-          <AnimatedCircles />
+          <NewsSection />
         </section>
 
         {/* RECRUIT SECTION */}
