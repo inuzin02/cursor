@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'ja_JP',
     siteName: 'CrestLab Inc.',
+    url: 'https://crestlab-inc.com/',
     images: [
       {
         url: 'https://crestlab-inc.com/ogp.png',
